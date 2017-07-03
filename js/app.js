@@ -19,8 +19,49 @@ var allImageNames = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'brea
 
 addProductsToArray();
 
+show3RandomImages();
 
-// get 3 random images from img folder and display them on index.html
+// TODO: after 25 clicks, turn off event listener
+
+imgParentElement.addEventListener('click', function(event) {
+  totalClicks++;
+  console.log(totalClicks);
+  var clickedId = event.target.getAttribute('id');
+  for (var i = 0; i < productsArray.length; i++) {
+    if (productsArray[i].imgName == clickedId) {
+      productsArray[i].timesClicked += 1;
+    }
+  }
+  lastShowing = nowShowing;
+  nowShowing = [];
+  remove3Images();
+  if (totalClicks < maxClicks) {
+    show3RandomImages();
+  }
+});
+
+
+
+function remove3Images() {
+  imgParentElement.removeChild(imgParentElement.lastChild);
+  imgParentElement.removeChild(imgParentElement.lastChild);
+  imgParentElement.removeChild(imgParentElement.lastChild);
+}
+
+//    TODO: display list of products with number of clicks for each '3 votes for Banana Slicer'
+
+function addProductsToArray() {
+  for (var i = 0; i < allImageNames.length; i++) {
+      // take extension off image names
+    var dotSplit = allImageNames[i].split('.');
+    var prodName = dotSplit[0];
+      // and capitalize first letter
+    var capProdName = prodName.charAt(0).toUpperCase() + prodName.slice(1);
+    prodName = new Products(capProdName, allImageNames[i]);
+    productsArray.push(prodName);
+  }
+}
+
 function show3RandomImages() {
   for (var j = 0; j < 3; j++) {
     randomImageGenerator();
@@ -35,41 +76,6 @@ function show3RandomImages() {
     imgElement.setAttribute('src', selectedImage);
     imgElement.setAttribute('id', productsArray[randomImage].imgName);
     imgParentElement.appendChild(imgElement);
-  }
-}
-
-show3RandomImages();
-
-// TODO: after 25 clicks, turn off event listener
-imgParentElement.addEventListener('click', function(event) {
-  console.log(totalClicks);
-  totalClicks += 1;
-  var clickedId = event.target.getAttribute('id');
-  for (var i = 0; i < productsArray.length; i++) {
-    if (productsArray[i].imgName == clickedId) {
-      productsArray[i].timesClicked += 1;
-    }
-  }
-  lastShowing = nowShowing;
-  nowShowing = [];
-  imgParentElement.removeChild(imgParentElement.lastChild);
-  imgParentElement.removeChild(imgParentElement.lastChild);
-  imgParentElement.removeChild(imgParentElement.lastChild);
-  show3RandomImages();
-});
-
-//    TODO: display list of products with number of clicks for each '3 votes for Banana Slicer'
-
-// create objects of all of the products and store them in an array
-function addProductsToArray() {
-  for (var i = 0; i < allImageNames.length; i++) {
-      // take extension off image names
-    var dotSplit = allImageNames[i].split('.');
-    var prodName = dotSplit[0];
-      // and capitalize first letter
-    var capProdName = prodName.charAt(0).toUpperCase() + prodName.slice(1);
-    prodName = new Products(capProdName, allImageNames[i]);
-    productsArray.push(prodName);
   }
 }
 
