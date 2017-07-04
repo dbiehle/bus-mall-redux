@@ -1,8 +1,21 @@
 * {
   font-family: sans-serif;
+  color: white;
+  text-align: center;
+  background-color: black;
 }
 
 img {
   display: inline;
   width: 25%;
+  border-radius: 20%;
+  padding: 10px;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  text-align: left;
 }

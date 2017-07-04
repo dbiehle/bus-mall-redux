@@ -2,9 +2,10 @@
 
 var productsArray = [];
 var imgParentElement = document.getElementById('imageArea');
+var listParentElement = document.getElementById('resultsList');
 var randomImage = 0;
 var totalClicks = 0;
-var maxClicks = 5;
+var maxClicks = 25;
 var nowShowing = [];
 var lastShowing = [];
 
@@ -21,11 +22,8 @@ addProductsToArray();
 
 show3RandomImages();
 
-// TODO: after 25 clicks, turn off event listener
-
 imgParentElement.addEventListener('click', function(event) {
   totalClicks++;
-  console.log(totalClicks);
   var clickedId = event.target.getAttribute('id');
   for (var i = 0; i < productsArray.length; i++) {
     if (productsArray[i].imgName == clickedId) {
@@ -37,18 +35,28 @@ imgParentElement.addEventListener('click', function(event) {
   remove3Images();
   if (totalClicks < maxClicks) {
     show3RandomImages();
+  } else {
+    showResultsList();
   }
 });
 
-
+function showResultsList() {
+  for (var i = 0; i < productsArray.length; i++) {
+    var li = document.createElement('li');
+    if (productsArray[i].timesClicked === 1) {
+      li.textContent = productsArray[i].timesClicked + ' vote for the ' + productsArray[i].imgName;
+    } else {
+      li.textContent = productsArray[i].timesClicked + ' votes for the ' + productsArray[i].imgName;
+    }
+    listParentElement.appendChild(li);
+  }
+}
 
 function remove3Images() {
   imgParentElement.removeChild(imgParentElement.lastChild);
   imgParentElement.removeChild(imgParentElement.lastChild);
   imgParentElement.removeChild(imgParentElement.lastChild);
 }
-
-//    TODO: display list of products with number of clicks for each '3 votes for Banana Slicer'
 
 function addProductsToArray() {
   for (var i = 0; i < allImageNames.length; i++) {
@@ -65,8 +73,8 @@ function addProductsToArray() {
 function show3RandomImages() {
   for (var j = 0; j < 3; j++) {
     randomImageGenerator();
-      // if the nowShowing array or the lastShowing array DOES include any objects with the same imgName, re-run the randomImageGenerator function
-    if (nowShowing.indexOf(productsArray[randomImage]) !== -1 || lastShowing.indexOf(productsArray[randomImage]) !== -1) {
+      // while the nowShowing array or the lastShowing array INCLUDE any objects with the same imgName, re-run the randomImageGenerator function
+    while (nowShowing.indexOf(productsArray[randomImage]) !== -1 || lastShowing.indexOf(productsArray[randomImage]) !== -1) {
       randomImageGenerator();
     }
     nowShowing.push(productsArray[randomImage]);
