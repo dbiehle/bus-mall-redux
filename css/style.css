@@ -19,3 +19,8 @@ ul {
 li {
   text-align: left;
 }
+
+canvas {
+  width: 80%;
+  height: 400px;
+}
