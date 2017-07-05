@@ -2,7 +2,6 @@
 
 var productsArray = [];
 var imgParentElement = document.getElementById('imageArea');
-var listParentElement = document.getElementById('resultsList');
 var randomImage = 0;
 var totalClicks = 0;
 var maxClicks = 25;
@@ -36,20 +35,51 @@ imgParentElement.addEventListener('click', function(event) {
   if (totalClicks < maxClicks) {
     show3RandomImages();
   } else {
-    showResultsList();
+    addChart();
   }
 });
 
-function showResultsList() {
+///////////////////////////////////////
+// FUNCTIONS
+
+function addChart() {
+  var chartLabels = [];
+  var chartClicks = [];
+  var chartShown = [];
   for (var i = 0; i < productsArray.length; i++) {
-    var li = document.createElement('li');
-    if (productsArray[i].timesClicked === 1) {
-      li.textContent = productsArray[i].timesClicked + ' vote for the ' + productsArray[i].imgName;
-    } else {
-      li.textContent = productsArray[i].timesClicked + ' votes for the ' + productsArray[i].imgName;
-    }
-    listParentElement.appendChild(li);
+    chartLabels.push(productsArray[i].imgName);
+    chartClicks.push(productsArray[i].timesClicked);
+    chartShown.push(productsArray[i].timesShown);
   }
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: chartLabels,
+      datasets: [{
+        label: 'Number of Times Chosen',
+        data: chartClicks,
+        backgroundColor: 'rgba(203, 75, 41, 0.5)',
+        borderColor: 'rgba(203, 75, 41,1)',
+        borderWidth: 1
+      }, {
+        label: 'Number of Times Shown',
+        data: chartShown,
+        backgroundColor: 'rgba(41, 154, 203, 0.5)',
+        borderColor: 'rgba(41, 154, 203,1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true
+          }
+        }]
+      }
+    }
+  });
 }
 
 function remove3Images() {
